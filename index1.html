@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crypto News Search</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        #results-container {
+            max-width: 800px;
+            margin: 20px auto;
+        }
+
+        .result {
+            margin-bottom: 10px;
+        }
+
+        .title {
+            font-size: 1.2em;
+            font-weight: bold;
+        }
+
+        .link {
+            color: #007BFF;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <div>
+        <label for="search-input">Search Crypto News: </label>
+        <input type="text" id="search-input">
+        <button onclick="searchCryptoNews()">Search</button>
+    </div>
+    
+    <div id="results-container"></div>
+
+    <script>
+        const apiKey = 'AIzaSyCKaGqorb7pegNsjVUAZcNbMpPLXtRf6ns';
+        const cx = '233059f13e23e426b';
+        <!--- --->
+
+        function searchCryptoNews() {
+            const searchInput = document.getElementById('search-input').value;
+            console.log('Searching for:', searchInput);
+
+            const apiUrl = `https://www.googleapis.com/customsearch/v1?q=${searchInput}&key=${apiKey}&cx=${cx}`;
+            console.log('API URL:', apiUrl);
+
+            fetch(apiUrl)
+                .then(response => response.json())
+                .then(data => {
+                    console.log('API Response:', data);
+                    displayResults(data.items);
+                })
+                .catch(error => console.error('Error fetching search results:', error));
+        }
+
+        function displayResults(results) {
+            const resultsContainer = document.getElementById('results-container');
+            resultsContainer.innerHTML = '';
+
+            results.forEach(result => {
+                const resultElement = document.createElement('div');
+                resultElement.classList.add('result');
+
+                const titleElement = document.createElement('div');
+                titleElement.classList.add('title');
+                titleElement.textContent = result.title;
+
+                const linkElement = document.createElement('a');
+                linkElement.classList.add('link');
+                linkElement.href = result.link;
+                linkElement.textContent = result.link;
+
+                resultElement.appendChild(titleElement);
+                resultElement.appendChild(linkElement);
+
+                resultsContainer.appendChild(resultElement);
+            });
+
+            console.log('Displayed results:', results);
+        }
+    </script>
+</body>
+</html>
